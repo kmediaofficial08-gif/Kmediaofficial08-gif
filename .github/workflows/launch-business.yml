@@ -1,1 +1,68 @@
+name: K Media Launch Trigger
 
+on:
+  workflow_dispatch:
+    inputs:
+      focus:
+        description: "Focus"
+        required: true
+        default: "cash"
+        type: choice
+        options:
+          - cash
+          - full
+
+jobs:
+  create-issue:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const focus = "${{ github.event.inputs.focus }}";
+            
+            const title = focus === "cash" 
+              ? "🔥 K Media – Cash-First Launch Actions"
+              : "🚀 K Media – Full Launch Checklist";
+
+            const body = focus === "cash" ? `
+### Do these first (in this order)
+
+1. **Send 10 $250 Audit DMs**  
+   Use the script already in Notion. Take payment on Cash App $82Ak. Log replies in Client Pipeline.
+
+2. **Stripe – Click “Verify your email”**  
+   One click. Don’t put codes in Notion.
+
+3. **Gumroad – Finish payouts + upload the $49 Starter Kit**  
+   Seller account already exists. Upload only the $49 kit first. Test checkout. Publish.
+
+Everything else waits until cash is moving.
+` : `
+### Full Launch Checklist
+
+**Money moves (do first)**
+- [ ] Send 10 $250 Audit DMs
+- [ ] Stripe verify-email click
+- [ ] Gumroad payouts + $49 Starter Kit live
+
+**Next layer**
+- [ ] Upload $199 Workflow Audit System + $397 Playbook
+- [ ] List the 30 low-ticket PDFs ($9–$24)
+- [ ] Post “Missed calls are lost jobs”
+- [ ] Twilio + HubSpot phone system build session
+
+**Rules**
+- No free offers
+- Outcomes only (never tool names publicly)
+- AI consulting and Trucking stay separate
+`;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body
+            });
