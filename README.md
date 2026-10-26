@@ -1,4 +1,4 @@
-## Hi there 👋# K Media | AI Integration and Operations Consulting
+K Media | AI Integration and Operations Consulting
 
 I help operators and small businesses stop losing time and jobs to missed calls, slow follow-up, and work that only lives in one person's head.
 
